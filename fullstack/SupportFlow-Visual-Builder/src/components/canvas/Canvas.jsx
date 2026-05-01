@@ -1,7 +1,7 @@
 import NodeCard from './NodeCard';
 //import flowData from '../../data/flow_data.json';
 
-export default function Canvas() {
+export default function Canvas({ nodes, onNodeClick }) {
   //const nodes = flowData.nodes;
   const NODE_WIDTH = 256; // 64rem in Tailwind = 256px
 
@@ -21,7 +21,7 @@ export default function Canvas() {
     nodes.forEach(node => {
       if (!node.options) return;
 
-      node.options.forEach(option => {
+      node.options.forEach((option, index) => { // <-- Added 'index' here
         const targetNode = nodes.find(n => n.id === option.nextId);
         if (targetNode) {
           // Parent Bottom Center
@@ -32,13 +32,13 @@ export default function Canvas() {
           const endX = targetNode.position.x + (NODE_WIDTH / 2);
           const endY = targetNode.position.y;
 
-          // Bezier curve magic (C point1, point2, endPoint)
-          const curveOffset = 60; // How "deep" the curve sweeps
+          // Bezier curve magic
+          const curveOffset = 60; 
           const d = `M ${startX} ${startY} C ${startX} ${startY + curveOffset}, ${endX} ${endY - curveOffset}, ${endX} ${endY}`;
           
           paths.push(
             <path 
-              key={`${node.id}-${targetNode.id}`}
+              key={`${node.id}-${targetNode.id}-${index}`} // <-- Added '-${index}' here to guarantee uniqueness!
               d={d}
               stroke="#3B82F6" 
               strokeWidth="2" 
@@ -48,7 +48,7 @@ export default function Canvas() {
           );
         }
       });
-    });
+      });
     return paths;
   };
 

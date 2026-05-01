@@ -1,4 +1,4 @@
-export default function NodeCard({ node }) {
+export default function NodeCard({ node, onClick }) {
   // Determine header color based on node type
   const getHeaderColor = (type) => {
     switch (type) {

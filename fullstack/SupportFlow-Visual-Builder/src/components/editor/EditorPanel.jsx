@@ -25,6 +25,18 @@ export default function EditorPanel({ node, onClose, onUpdate }) {
     onUpdate({ ...node, options: updatedOptions });
   };
 
+  // Handler to add a new option to the node
+  const handleAddOption = () => {
+    const newOption = { label: "New Option", nextId: null }; 
+    onUpdate({ ...node, options: [...(node.options || []), newOption] });
+  };
+
+  // Handler to delete a specific option
+  const handleDeleteOption = (indexToRemove) => {
+    const updatedOptions = node.options.filter((_, index) => index !== indexToRemove);
+    onUpdate({ ...node, options: updatedOptions });
+  };
+
   return (
     <aside className="w-96 border-l border-slate-700 bg-surface flex flex-col shrink-0 h-full shadow-2xl z-50">
       {/* Header */}
@@ -70,7 +82,7 @@ export default function EditorPanel({ node, onClose, onUpdate }) {
             </label>
             <div className="flex flex-col gap-2">
               {node.options?.map((opt, i) => (
-                <div key={i} className="flex items-center bg-slate-900 border border-slate-700 rounded p-2">
+                <div key={i} className="group flex items-center bg-slate-900 border border-slate-700 rounded p-2 hover:border-slate-500 transition-colors">
                   <span className="text-slate-500 px-2 cursor-grab">⋮⋮</span>
                   <input
                     type="text"
@@ -78,9 +90,20 @@ export default function EditorPanel({ node, onClose, onUpdate }) {
                     onChange={(e) => handleOptionChange(i, e.target.value)}
                     className="bg-transparent border-none outline-none text-sm text-slate-300 flex-1 ml-2"
                   />
+                  {/* Delete Button (Appears on Hover) */}
+                  <button 
+                    onClick={() => handleDeleteOption(i)}
+                    className="text-slate-500 hover:text-danger px-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                    title="Delete Option"
+                  >
+                    ✕
+                  </button>
                 </div>
               ))}
-              <button className="w-full mt-2 py-2 border border-dashed border-slate-600 rounded text-slate-400 text-xs hover:text-white hover:border-slate-400 transition-colors flex items-center justify-center gap-2">
+              <button 
+                onClick={handleAddOption}
+                className="w-full mt-2 py-2 border border-dashed border-slate-600 rounded text-slate-400 text-xs hover:text-white hover:border-slate-400 transition-colors flex items-center justify-center gap-2"
+              >
                 + Add Option
               </button>
             </div>
