@@ -1,5 +1,7 @@
 # SupportFlow Visual Builder
 
+🎨 UI Design File: https://www.figma.com/design/OUfx6NTvECc97nNS8tn9xq/Untitled?node-id=0-1&t=a5KL5wv55XsNh0Xj-1
+
 A custom-built, interactive node-based visual editor designed for creating and managing support workflows. This project was developed as part of the AmaliTech DEG Project-based challenge.
 
 ## 🚀 Features
