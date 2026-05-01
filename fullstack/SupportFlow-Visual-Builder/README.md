@@ -1,16 +1,27 @@
-# React + Vite
+# SupportFlow Visual Builder
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A custom-built, interactive node-based visual editor designed for creating and managing support workflows. This project was developed as part of the AmaliTech DEG Project-based challenge.
 
-Currently, two official plugins are available:
+## 🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+* **Custom Drag-and-Drop Canvas:** Freely position workflow nodes across the canvas using a custom-built React state management system.
+* **Dynamic SVG Routing:** Connection lines between nodes are generated using mathematically calculated Bezier curves that update in real-time as nodes are moved or connected.
+* **Real-Time Editor Panel:** Select any node to instantly modify its title, message content, and interactive options.
+* **Connection Management:** Seamlessly route node options to target nodes using an intuitive dropdown system, visually represented instantly on the canvas.
+* **Zero-Dependency Core:** Built strictly without external graphing, charting, or drag-and-drop libraries to demonstrate strong proficiency in pure React state manipulation, DOM math, and SVG rendering.
 
-## React Compiler
+## 🛠️ Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+* **Framework:** React 18 + Vite
+* **Styling:** Tailwind CSS (v3)
+* **Icons/Graphics:** Pure SVG & Tailwind utilities
+* **State Management:** React `useState`
 
-## Expanding the ESLint configuration
+## 📦 Getting Started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+To run this project locally:
+
+1. **Clone the repository:**
+   ```bash
+   git clone <your-repo-link>
+   cd SupportFlow-Visual-Builder
