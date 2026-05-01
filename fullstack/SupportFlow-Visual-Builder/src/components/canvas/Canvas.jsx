@@ -1,8 +1,8 @@
 import NodeCard from './NodeCard';
-import flowData from '../../data/flow_data.json';
+//import flowData from '../../data/flow_data.json';
 
 export default function Canvas() {
-  const nodes = flowData.nodes;
+  //const nodes = flowData.nodes;
   const NODE_WIDTH = 256; // 64rem in Tailwind = 256px
 
   // This helper calculates the height of a node dynamically to find the exact bottom center
@@ -67,7 +67,7 @@ export default function Canvas() {
 
       {/* Render React Nodes */}
       {nodes.map(node => (
-        <NodeCard key={node.id} node={node} />
+      <NodeCard key={node.id} node={node} onClick={() => onNodeClick(node.id)} />
       ))}
     </div>
   );

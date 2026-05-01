@@ -23,8 +23,9 @@ export default function NodeCard({ node }) {
 
   return (
     <div 
-      className="absolute w-64 bg-node border border-slate-700 rounded-lg shadow-xl text-sm flex flex-col z-10"
-      style={{ left: node.position.x, top: node.position.y }}
+    onClick={onClick}
+    className="absolute w-64 bg-node border border-slate-700 rounded-lg shadow-xl text-sm flex flex-col z-10 cursor-pointer hover:border-primary transition-colors"
+    style={{ left: node.position.x, top: node.position.y }}
     >
       {/* Top Connection Dot (Except for Start Node) */}
       {node.type !== 'start' && (
