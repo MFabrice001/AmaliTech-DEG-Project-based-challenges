@@ -7,6 +7,19 @@ export default function NodeCard({ node }) {
       default: return 'bg-slate-700 text-slate-200 border-slate-600';
     }
   };
+   
+  // Map specific node IDs to my exact Figma titles
+  const getNodeTitle = (node) => {
+    switch (node.id) {
+      case '1': return '▶ Start';
+      case '2': return '⚙️ Troubleshoot';
+      case '3': return '🏦 Account Type';
+      case '4': return '📞 Action: Call';
+      case '5': return '✅ Resolution';
+      case '6': return '🤝 Action: Handoff';
+      default: return '⚙️ Node';
+    }
+  };
 
   return (
     <div 
@@ -20,7 +33,7 @@ export default function NodeCard({ node }) {
 
       {/* Node Header */}
       <div className={`px-3 py-2 border-b text-xs font-bold uppercase rounded-t-lg flex items-center gap-2 ${getHeaderColor(node.type)}`}>
-        {node.type === 'start' ? '▶ Start' : node.type === 'question' ? '⚙️ Troubleshoot' : '📞 Action'}
+        {getNodeTitle(node)}
       </div>
 
       {/* Node Content */}
