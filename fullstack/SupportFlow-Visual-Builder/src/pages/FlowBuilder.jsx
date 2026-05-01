@@ -1,10 +1,11 @@
 import { useState } from 'react';
+import Navbar from '../components/layout/Navbar';
 import Sidebar from '../components/layout/Sidebar';
 import Canvas from '../components/canvas/Canvas';
 import EditorPanel from '../components/editor/EditorPanel';
+import PreviewPhone from '../components/preview/PreviewPhone';
 import flowData from '../data/flow_data.json';
 
-// Helper to inject titles into the original JSON data so they become editable state
 const initializeNodes = (nodes) => {
   const getInitialTitle = (id) => {
     switch (id) {
@@ -24,20 +25,23 @@ export default function FlowBuilder() {
   const [nodes, setNodes] = useState(() => initializeNodes(flowData.nodes));
   const [selectedNodeId, setSelectedNodeId] = useState(null);
   const [draggingNodeId, setDraggingNodeId] = useState(null);
+  
+  // STATE FOR PREVIEW MODE
+  const [isPreviewMode, setIsPreviewMode] = useState(false);
 
-  // --- NODE MANAGEMENT ---
   const handleAddNode = () => {
     const newNodeId = Date.now().toString(); 
     const newNode = {
       id: newNodeId,
       type: "question",
-      title: "⚙️ Custom Node", // <-- Now the new node has an editable title!
+      title: "⚙️ Custom Node",
       text: "New Node Created! Edit me.",
       position: { x: 300, y: 150 }, 
       options: []
     };
     setNodes([...nodes, newNode]);
     setSelectedNodeId(newNodeId); 
+    setIsPreviewMode(false); 
   };
 
   const handleDeleteNode = () => {
@@ -49,7 +53,6 @@ export default function FlowBuilder() {
     setNodes(nodes.map(node => node.id === updatedNode.id ? updatedNode : node));
   };
 
-  // --- DRAG LOGIC ---
   const handleDragStart = (id) => {
     setDraggingNodeId(id);
     setSelectedNodeId(id);
@@ -69,37 +72,52 @@ export default function FlowBuilder() {
   };
 
   return (
-    <div className="w-full h-full flex relative overflow-hidden bg-surface">
-      <Sidebar onAddNode={handleAddNode} />
+    <div className="w-screen h-screen flex flex-col bg-surface overflow-hidden">
+      {/* 1. TOP NAVBAR */}
+      <Navbar 
+        isPreviewMode={isPreviewMode} 
+        onTogglePreview={() => setIsPreviewMode(!isPreviewMode)} 
+      />
 
-      <div 
-        className="flex-1 relative overflow-auto"
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
-      >
-        <Canvas 
-          nodes={nodes} 
-          onNodeClick={(id) => setSelectedNodeId(id)} 
-          onDragStart={handleDragStart}
-        />
-        
-        {!selectedNodeId && (
-          <div className="absolute top-4 right-4 bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-full flex items-center gap-2 text-xs text-slate-300 shadow-lg">
-            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-            Live Environment: Active
-          </div>
+      {/* 2. MAIN WORKSPACE */}
+      <div className="flex-1 flex overflow-hidden relative">
+        <Sidebar onAddNode={handleAddNode} />
+
+        <div 
+          className="flex-1 relative overflow-auto flex"
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+        >
+          {/* Toggle Between Canvas and Phone based on Navbar State */}
+          {isPreviewMode ? (
+            <PreviewPhone nodes={nodes} />
+          ) : (
+            <Canvas 
+              nodes={nodes} 
+              onNodeClick={(id) => setSelectedNodeId(id)} 
+              onDragStart={handleDragStart}
+            />
+          )}
+
+          {!selectedNodeId && !isPreviewMode && (
+            <div className="absolute top-4 right-4 bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-full flex items-center gap-2 text-xs text-slate-300 shadow-lg">
+              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+              Live Environment: Active
+            </div>
+          )}
+        </div>
+
+        {selectedNodeId && !isPreviewMode && (
+          <EditorPanel 
+            node={nodes.find(n => n.id === selectedNodeId)} 
+            allNodes={nodes}
+            onClose={() => setSelectedNodeId(null)}
+            onUpdate={handleUpdateNode}
+            onDelete={handleDeleteNode}
+          />
         )}
       </div>
-
-      {selectedNodeId && (
-        <EditorPanel 
-          node={nodes.find(n => n.id === selectedNodeId)} 
-          onClose={() => setSelectedNodeId(null)}
-          onUpdate={handleUpdateNode}
-          onDelete={handleDeleteNode}
-        />
-      )}
     </div>
   );
 }
