@@ -1,4 +1,4 @@
-export default function NodeCard({ node, onClick }) {
+export default function NodeCard({ node, onClick, onDragStart }) {
   // Determine header color based on node type
   const getHeaderColor = (type) => {
     switch (type) {
@@ -7,34 +7,22 @@ export default function NodeCard({ node, onClick }) {
       default: return 'bg-slate-700 text-slate-200 border-slate-600';
     }
   };
-   
-  // Map specific node IDs to my exact Figma titles
-  const getNodeTitle = (node) => {
-    switch (node.id) {
-      case '1': return '▶ Start';
-      case '2': return '⚙️ Troubleshoot';
-      case '3': return '🏦 Account Type';
-      case '4': return '📞 Action: Call';
-      case '5': return '✅ Resolution';
-      case '6': return '🤝 Action: Handoff';
-      default: return '⚙️ Node';
-    }
-  };
 
   return (
     <div 
-    onClick={onClick}
-    className="absolute w-64 bg-node border border-slate-700 rounded-lg shadow-xl text-sm flex flex-col z-10 cursor-pointer hover:border-primary transition-colors"
-    style={{ left: node.position.x, top: node.position.y }}
+      onMouseDown={() => onDragStart(node.id)}
+      onClick={onClick}
+      className="absolute w-64 bg-node border border-slate-700 rounded-lg shadow-xl text-sm flex flex-col z-10 cursor-move hover:border-primary transition-colors select-none"
+      style={{ left: node.position.x, top: node.position.y }}
     >
       {/* Top Connection Dot (Except for Start Node) */}
       {node.type !== 'start' && (
         <div className="absolute -top-1.5 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-slate-400 border-2 border-node rounded-full" />
       )}
 
-      {/* Node Header */}
-      <div className={`px-3 py-2 border-b text-xs font-bold uppercase rounded-t-lg flex items-center gap-2 ${getHeaderColor(node.type)}`}>
-        {getNodeTitle(node)}
+      {/* Node Header - Now rendering the dynamic state! */}
+      <div className={`px-3 py-2 border-b text-xs font-bold uppercase rounded-t-lg flex items-center gap-2 ${getHeaderColor(node.type)} truncate`}>
+        {node.title}
       </div>
 
       {/* Node Content */}

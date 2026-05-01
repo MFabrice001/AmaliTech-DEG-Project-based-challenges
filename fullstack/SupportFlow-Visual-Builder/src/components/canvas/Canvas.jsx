@@ -1,8 +1,6 @@
 import NodeCard from './NodeCard';
-//import flowData from '../../data/flow_data.json';
 
-export default function Canvas({ nodes, onNodeClick }) {
-  //const nodes = flowData.nodes;
+export default function Canvas({ nodes, onNodeClick, onDragStart }) {
   const NODE_WIDTH = 256; // 64rem in Tailwind = 256px
 
   // This helper calculates the height of a node dynamically to find the exact bottom center
@@ -18,10 +16,12 @@ export default function Canvas({ nodes, onNodeClick }) {
   const generateConnections = () => {
     const paths = [];
     
+    if (!nodes) return paths;
+
     nodes.forEach(node => {
       if (!node.options) return;
 
-      node.options.forEach((option, index) => { // <-- Added 'index' here
+      node.options.forEach((option, index) => { 
         const targetNode = nodes.find(n => n.id === option.nextId);
         if (targetNode) {
           // Parent Bottom Center
@@ -38,7 +38,7 @@ export default function Canvas({ nodes, onNodeClick }) {
           
           paths.push(
             <path 
-              key={`${node.id}-${targetNode.id}-${index}`} // <-- Added '-${index}' here to guarantee uniqueness!
+              key={`${node.id}-${targetNode.id}-${index}`} 
               d={d}
               stroke="#3B82F6" 
               strokeWidth="2" 
@@ -48,13 +48,13 @@ export default function Canvas({ nodes, onNodeClick }) {
           );
         }
       });
-      });
+    });
     return paths;
   };
 
   return (
     <div className="relative w-full h-full bg-surface overflow-auto">
-      {/* Background Dot Grid for that "Editor" feel */}
+      {/* Background Dot Grid */}
       <div 
         className="absolute inset-0 pointer-events-none opacity-20"
         style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '24px 24px' }}
@@ -66,8 +66,13 @@ export default function Canvas({ nodes, onNodeClick }) {
       </svg>
 
       {/* Render React Nodes */}
-      {nodes.map(node => (
-      <NodeCard key={node.id} node={node} onClick={() => onNodeClick(node.id)} />
+      {nodes && nodes.map(node => (
+        <NodeCard 
+          key={node.id} 
+          node={node} 
+          onClick={() => onNodeClick(node.id)} 
+          onDragStart={onDragStart}
+        />
       ))}
     </div>
   );

@@ -1,4 +1,4 @@
-export default function Sidebar() {
+export default function Sidebar({ onAddNode }) { 
   return (
     <aside className="w-64 border-r border-slate-700 bg-surface flex flex-col shrink-0">
       {/* Project Info */}
@@ -14,7 +14,10 @@ export default function Sidebar() {
 
       {/* Action Button */}
       <div className="px-4 mb-6">
-        <button className="w-full bg-primary hover:bg-blue-600 text-white py-2 rounded text-sm font-medium transition-colors">
+        <button 
+          onClick={onAddNode} // <-- Attached the click event here!
+          className="w-full bg-primary hover:bg-blue-600 text-white py-2 rounded text-sm font-medium transition-colors"
+        >
           + New Node
         </button>
       </div>
